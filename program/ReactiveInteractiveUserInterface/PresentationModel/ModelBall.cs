@@ -19,10 +19,12 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 {
   internal class ModelBall : IBall
   {
-    public ModelBall(double top, double left, LogicIBall underneathBall)
+    public ModelBall(double top, double left, LogicIBall underneathBall, double scaleX, double scaleY)
     {
-      TopBackingField = top;
-      LeftBackingField = left;
+      TopBackingField = top * scaleY;
+      LeftBackingField = left * scaleX;
+      this.scaleX = scaleX;
+      this.scaleY = scaleY;
       underneathBall.NewPositionNotification += NewPositionNotification;
     }
 
@@ -66,10 +68,13 @@ namespace TP.ConcurrentProgramming.Presentation.Model
 
     private double TopBackingField;
     private double LeftBackingField;
+    private readonly double scaleX;
+    private readonly double scaleY;
 
     private void NewPositionNotification(object sender, IPosition e)
     {
-      Top = e.y; Left = e.x;
+      Top = e.y * scaleY; 
+      Left = e.x * scaleX;
     }
 
     private void RaisePropertyChanged([CallerMemberName] string propertyName = "")

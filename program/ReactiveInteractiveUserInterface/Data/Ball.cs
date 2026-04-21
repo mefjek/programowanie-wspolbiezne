@@ -14,10 +14,14 @@ namespace TP.ConcurrentProgramming.Data
   {
     #region ctor
 
-    internal Ball(Vector initialPosition, Vector initialVelocity)
+    internal Ball(Vector initialPosition, Vector initialVelocity, double boardWidth, double boardHeight, double diameter)
     {
       Position = initialPosition;
       Velocity = initialVelocity;
+      this.boardWidth = boardWidth;
+      this.boardHeight = boardHeight;
+      this.diameter = diameter;
+
     }
 
     #endregion ctor
@@ -33,6 +37,9 @@ namespace TP.ConcurrentProgramming.Data
     #region private
 
     private Vector Position;
+    private double boardWidth;
+    private double boardHeight;
+    private double diameter;
 
     private void RaiseNewPositionChangeNotification()
     {
@@ -41,7 +48,27 @@ namespace TP.ConcurrentProgramming.Data
 
     internal void Move(Vector delta)
     {
-      Position = new Vector(Position.x + delta.x, Position.y + delta.y);
+      double newX = Position.x + delta.x;
+      double newY = Position.y + delta.y;
+
+      if (newX < 0)
+      {
+        newX = 0;
+      }
+      else if (newX > boardWidth - diameter)
+      {
+        newX = boardWidth - diameter;
+      }
+      if (newY < 0)
+      {
+        newY = 0;
+      }
+      else if (newY > boardHeight - diameter)
+      {
+        newY = boardHeight - diameter;
+      }
+
+      Position = new Vector(newX, newY);
       RaiseNewPositionChangeNotification();
     }
 
